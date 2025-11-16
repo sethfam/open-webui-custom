@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  open-webui-ollama:
+    build:
+      context: .
+      dockerfile: Dockerfile.combined
+      args:
+        USE_OLLAMA: true
+        USE_CUDA: false
+        USE_SLIM: false
+    image: open-webui-ollama:latest
+    container_name: open-webui-ollama
+    volumes:
+      - open-webui-data:/app/backend/data
+      - ollama-data:/root/.ollama
+    ports:
+      - "3000:8080"  # Open WebUI
+      - "11434:11434"  # Ollama API
+    environment:
+      - WEBUI_SECRET_KEY=
+      - OLLAMA_BASE_URL=http://localhost:11434
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  open-webui-data:
+    driver: local
+  ollama-data:
+    driver: local

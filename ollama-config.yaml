@@ -1,0 +1,22 @@
+# High-Performance Ollama Configuration for 48GB RAM System
+# This configuration optimizes Ollama for maximum performance
+
+# Memory and Performance Settings
+num_parallel: 4          # Process 4 requests in parallel
+max_loaded_models: 3      # Keep up to 3 models loaded in memory
+max_queue: 512           # Large queue for handling many requests
+flash_attention: 1       # Enable flash attention for faster processing
+
+# GPU Settings (if available)
+gpu_layers: -1           # Use all available GPU layers
+gpu_memory_fraction: 0.9 # Use 90% of GPU memory
+
+# Model Loading Optimization
+keep_alive: "24h"        # Keep models loaded for 24 hours
+num_ctx: 8192           # Large context window for better responses
+num_batch: 512          # Large batch size for efficiency
+num_thread: 16          # Use 16 CPU threads
+
+# Memory Management
+low_vram: false         # Disable low VRAM mode (we have plenty of RAM)
+f16_kv: true           # Use 16-bit precision for key-value cache
