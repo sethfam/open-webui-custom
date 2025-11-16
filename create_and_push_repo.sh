@@ -26,14 +26,14 @@ echo ""
 # Step 1: Create repository on GitHub (if token provided)
 if [ -n "$GITHUB_TOKEN" ]; then
     echo "📦 Creating repository on GitHub..."
-    RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
+    RESPONSE=$(curl -s -w "\nHTTP_CODE:%{http_code}" -X POST \
         -H "Authorization: token ${GITHUB_TOKEN}" \
         -H "Accept: application/vnd.github.v3+json" \
         https://api.github.com/user/repos \
         -d "{\"name\":\"${NEW_REPO_NAME}\",\"description\":\"Custom fork of Open WebUI with agent configurations\",\"private\":false}")
     
-    HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
-    RESPONSE_BODY=$(echo "$RESPONSE" | head -n -1)
+    HTTP_CODE=$(echo "$RESPONSE" | grep "HTTP_CODE:" | cut -d: -f2)
+    RESPONSE_BODY=$(echo "$RESPONSE" | sed '/HTTP_CODE:/d')
     
     if [ "$HTTP_CODE" = "201" ]; then
         echo "✅ Repository created successfully on GitHub!"
